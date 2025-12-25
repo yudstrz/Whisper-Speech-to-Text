@@ -7,8 +7,8 @@ env.useBrowserCache = false;
 
 class PipelineFactory {
     static task = 'automatic-speech-recognition';
-    static model = 'xenova/whisper-small';
-    static quantized = false;
+    static model = 'xenova/whisper-tiny';
+    static quantized = true;
     static instance = null;
 
     static async getInstance(progress_callback = null) {

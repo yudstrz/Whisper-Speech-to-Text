@@ -24,11 +24,11 @@ export default function Home() {
         const onMessageReceived = (e) => {
             switch (e.data.status) {
                 case 'initiate':
-                    setStatus('Initializing AI Model...');
+                    setStatus('Downloading AI Model (First Run Only)...');
                     break;
                 case 'progress':
                     setProgress(e.data.progress);
-                    setStatus(`Loading AI Model: ${Math.round(e.data.progress)}%`);
+                    setStatus(`Downloading AI Model: ${Math.round(e.data.progress)}%`);
                     break;
                 case 'done':
                     setStatus('Model Ready');
