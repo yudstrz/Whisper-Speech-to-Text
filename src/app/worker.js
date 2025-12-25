@@ -11,8 +11,9 @@ class PipelineFactory {
     static quantized = true;
     static instance = null;
 
-    static async getInstance(progress_callback = null) {
-        if (this.instance === null) {
+    static async getInstance(progress_callback = null, model = 'xenova/whisper-tiny') {
+        if (this.instance === null || this.model !== model) {
+            this.model = model;
             this.instance = await pipeline(this.task, this.model, {
                 quantized: this.quantized,
                 progress_callback,
@@ -30,7 +31,7 @@ self.addEventListener('message', async (event) => {
     try {
         transcriber = await PipelineFactory.getInstance(x => {
             self.postMessage(x);
-        });
+        }, message.model);
     } catch (err) {
         console.error(err);
         self.postMessage({ status: 'error', data: err.message });
