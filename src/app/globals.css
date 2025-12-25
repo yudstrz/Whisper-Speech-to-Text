@@ -1,89 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --background: #0f0c29;
-  --background-gradient: linear-gradient(300deg, #302b63, #24243e, #0f0c29);
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --bg-dark: #05050A;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #1e1b4b, #05050A 60%);
+  
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  
+  --accent-primary: #818cf8;
+  --accent-secondary: #c084fc;
+  --accent-glow: 0 0 40px rgba(129, 140, 248, 0.15);
+  
   --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --accent: #7f5af0;
-  --accent-glow: 0 0 20px rgba(127, 90, 240, 0.5);
+  --text-secondary: #94a3b8;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
-  background: var(--background);
-  background-image: var(--background-gradient);
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  background-image: var(--bg-gradient);
   background-attachment: fixed;
-  background-size: 200% 200%;
-  animation: gradientBG 15s ease infinite;
   color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.glass-container {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  box-shadow: var(--glass-shadow);
-  padding: 2rem;
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .interactive-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .interactive-hover:hover {
+    @apply transform -translate-y-1 shadow-lg shadow-indigo-500/20;
+    border-color: var(--glass-highlight);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), #6366f1);
+    @apply text-white font-medium px-6 py-3 rounded-xl shadow-lg shadow-indigo-500/30 
+           transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-indigo-500/50
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+  
+  .btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    @apply text-white font-medium px-6 py-3 rounded-xl shadow-lg shadow-red-500/30 
+           transition-all duration-300 animate-pulse;
+  }
 }
 
-.title {
-  font-size: 3rem;
-  font-weight: 800;
-  text-align: center;
-  background: linear-gradient(to right, #fff, #a0a0a0);
+.text-gradient {
+  background: linear-gradient(to right, #fff, #c084fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 2rem;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), #6246ea);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.3);
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(127, 90, 240, 0.5);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+.loader-pulse {
+  animation: loaderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.progress-bar {
-  width: 100%;
-  height: 6px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 10px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--accent);
-  width: 0%;
-  transition: width 0.3s ease;
+@keyframes loaderPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
 }
