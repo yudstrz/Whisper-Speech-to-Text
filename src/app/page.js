@@ -42,6 +42,10 @@ export default function Home() {
         };
 
         worker.current.addEventListener('message', onMessageReceived);
+
+        // Trigger model loading immediately
+        worker.current.postMessage({ type: 'load' });
+
         return () => worker.current?.removeEventListener('message', onMessageReceived);
     }, []);
 

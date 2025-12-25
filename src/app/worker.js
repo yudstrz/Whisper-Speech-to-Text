@@ -25,26 +25,31 @@ class PipelineFactory {
 self.addEventListener('message', async (event) => {
     const message = event.data;
 
-    // Do some work...
-    // TODO: Add support for other tasks?
-    let transcript = '';
+    // Initialize the pipeline
+    let transcriber;
     try {
-        const transcriber = await PipelineFactory.getInstance(x => {
-            // We also report progress to the main thread
+        transcriber = await PipelineFactory.getInstance(x => {
             self.postMessage(x);
         });
+    } catch (err) {
+        console.error(err);
+        self.postMessage({ status: 'error', data: err.message });
+        return;
+    }
 
+    // If this is just a load command, stop here
+    if (message.type === 'load') {
+        self.postMessage({ status: 'done' });
+        return;
+    }
+
+    // Otherwise, proceed with transcription
+    let transcript = '';
+    try {
         const output = await transcriber(message.audio, {
-            // Greedy
             top_k: 0,
             do_sample: false,
-
-            // Spanish to English?
-            // language: 'spanish', task: 'translate',
-
-            // Return timestamps
             return_timestamps: true,
-
             chunk_length_s: 30,
             stride_length_s: 5,
         });
